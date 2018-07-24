@@ -27,8 +27,14 @@ for(n in 1:length(xlist))
 require(data.table)
 for(n in 1:length(ylist))
 {
-  n = 1
+  n = 2
   yy <-as.data.frame(fread(ylist[n], skip = 1, header = FALSE, nThread = 10))
+  ts = apply(as.matrix(yy[, -1]), 2, sum)
+  ts = sum(c(1:50)*ts)
+  cs = apply(as.matrix(yy[, -1]), 1, sum)
+  cs = sum(cs*rep(c(0:49), nrow(yy)/50))
+  
+  cat("estimated Pe -- " ,cs/ts, "\n")
   
 }
 
