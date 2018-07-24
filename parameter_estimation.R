@@ -12,9 +12,28 @@
 dataDir = "data"
 xlist = list.files(path = dataDir, pattern = "slamdunk_mapped_filtered_overallrates.csv", full.names = TRUE)
 xlist = xlist[grep("_0h-", xlist)]
+ylist =  list.files(path = dataDir, pattern = ".tsv", full.names = TRUE)
+ylist = ylist[grep("_0h-", ylist)]
 
+# calculate the sequence error rate by T-to-C ratio from the stat file
+rr = c()
 for(n in 1:length(xlist))
 {
-  n = 1
-  xx = read.csv(xlist[n], header = TRUE, comment.char = "#", row.names = 1)
+  # n = 1
+  xx = read.csv(xlist[n], header = TRUE, row.names = 1, sep = "\t", skip = 1)
+  rr =rbind(rr, c((xx$T/sum(xx$T))[which(rownames(xx)=="C")], (xx$t/sum(xx$t))[which(rownames(xx)=="C")]))
 }
+
+require(data.table)
+for(n in 1:length(ylist))
+{
+  n = 1
+  yy <-as.data.frame(fread(ylist[n], skip = 1, header = FALSE, nThread = 10))
+  
+}
+
+
+
+
+
+
